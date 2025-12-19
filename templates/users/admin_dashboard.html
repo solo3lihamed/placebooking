@@ -27,6 +27,14 @@
         </div>
     </div>
 
+    <!-- Quick Actions / Navigation -->
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 3rem;">
+        <a href="{% url 'admin_users_list' %}" class="btn btn-glass" style="text-align: center;">👥 إدارة المستخدمين</a>
+        <a href="{% url 'admin_venues_list' %}" class="btn btn-glass" style="text-align: center;">🏟️ كل الأماكن</a>
+        <a href="{% url 'admin_bookings_list' %}" class="btn btn-glass" style="text-align: center;">📅 كل الحجوزات</a>
+    </div>
+
     <!-- Recent Bookings Table -->
     <div class="glass-card" style="padding: 2rem; overflow-x: auto;">
         <h2 style="margin-bottom: 1.5rem; color: var(--color-primary);">🚀 أحدث النشاطات</h2>

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--color-secondary);">🏟️ إدارة الأماكن</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-glass">↩️ عودة للوحة الأدمن</a>
+    </div>
+
+    <div class="glass-card" style="padding: 2rem; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 0.8rem;">
+            <thead>
+                <tr style="text-align: right; color: var(--color-text-light);">
+                    <th style="padding: 1rem;">الاسم</th>
+                    <th style="padding: 1rem;">المدير المسئول</th>
+                    <th style="padding: 1rem;">النوع</th>
+                    <th style="padding: 1rem;">السعة</th>
+                    <th style="padding: 1rem;">الحالة</th>
+                    <th style="padding: 1rem;">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venue in venues %}
+                <tr style="background: rgba(255,255,255,0.3);">
+                    <td
+                        style="padding: 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px; font-weight: bold;">
+                        <a href="{% url 'venue_detail' venue.pk %}">{{ venue.name }}</a>
+                    </td>
+                    <td style="padding: 1rem;">{{ venue.manager.username }}</td>
+                    <td style="padding: 1rem;">{{ venue.get_venue_type_display }}</td>
+                    <td style="padding: 1rem;">{{ venue.capacity }}</td>
+                    <td style="padding: 1rem;">
+                        <span class="badge 
+                            {% if venue.status == 'ACTIVE' %}badge-success
+                            {% elif venue.status == 'INACTIVE' %}badge-danger
+                            {% else %}badge-warning{% endif %}">
+                            {{ venue.get_status_display }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                        <a href="{% url 'venue_detail' venue.pk %}" class="btn btn-glass"
+                            style="font-size: 0.8rem; padding: 0.2rem 0.6rem;">عرض</a>
+                        <!-- Future: Add Admin Delete/Suspend Actions -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

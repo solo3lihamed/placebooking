@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: #feca57;">📅 سجل الحجوزات الشامل</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-glass">↩️ عودة للوحة الأدمن</a>
+    </div>
+
+    <div class="glass-card" style="padding: 2rem; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 0.8rem;">
+            <thead>
+                <tr style="text-align: right; color: var(--color-text-light);">
+                    <th style="padding: 1rem;">رقم الحجز</th>
+                    <th style="padding: 1rem;">المكان</th>
+                    <th style="padding: 1rem;">العميل</th>
+                    <th style="padding: 1rem;">التاريخ</th>
+                    <th style="padding: 1rem;">السعر</th>
+                    <th style="padding: 1rem;">الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr style="background: rgba(255,255,255,0.3);">
+                    <td style="padding: 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">#{{
+                        booking.id }}</td>
+                    <td style="padding: 1rem;">{{ booking.venue.name }}</td>
+                    <td style="padding: 1rem;">{{ booking.customer.username }}</td>
+                    <td style="padding: 1rem;">{{ booking.start_time|date:"Y-m-d" }}</td>
+                    <td style="padding: 1rem;">{{ booking.total_price }} ريال</td>
+                    <td style="padding: 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                        <span class="badge 
+                            {% if booking.status == 'CONFIRMED' or booking.status == 'APPROVED' %}badge-success
+                            {% elif booking.status == 'CANCELLED' or booking.status == 'REJECTED' %}badge-danger
+                            {% else %}badge-warning{% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

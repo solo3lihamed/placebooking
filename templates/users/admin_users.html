@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--color-primary);">👥 إدارة المستخدمين</h1>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-glass">↩️ عودة للوحة الأدمن</a>
+    </div>
+
+    <div class="glass-card" style="padding: 2rem; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 0.8rem;">
+            <thead>
+                <tr style="text-align: right; color: var(--color-text-light);">
+                    <th style="padding: 1rem;">ID</th>
+                    <th style="padding: 1rem;">الاسم</th>
+                    <th style="padding: 1rem;">الدور</th>
+                    <th style="padding: 1rem;">تاريخ التسجيل</th>
+                    <th style="padding: 1rem;">الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_obj in users %}
+                <tr style="background: rgba(255,255,255,0.3);">
+                    <td style="padding: 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">#{{
+                        user_obj.id }}</td>
+                    <td style="padding: 1rem; font-weight: bold;">{{ user_obj.username }}</td>
+                    <td style="padding: 1rem;">
+                        <span class="badge" style="background: rgba(255,255,255,0.5);">{{ user_obj.get_role_display
+                            }}</span>
+                    </td>
+                    <td style="padding: 1rem;">{{ user_obj.date_joined|date:"Y-m-d" }}</td>
+                    <td style="padding: 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                        {% if user_obj.is_active %}
+                        <span style="color: var(--color-success);">✔ نشط</span>
+                        {% else %}
+                        <span style="color: var(--color-text-light);">❌ محظور</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -27,3 +27,21 @@ def admin_dashboard(request):
         'recent_bookings': recent_bookings
     }
     return render(request, 'users/admin_dashboard.html', context)
+
+@login_required
+@user_passes_test(is_admin)
+def admin_users_list(request):
+    users = User.objects.all().order_by('-date_joined')
+    return render(request, 'users/admin_users.html', {'users': users})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_venues_list(request):
+    venues = Venue.objects.all().order_by('-created_at')
+    return render(request, 'users/admin_venues.html', {'venues': venues})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_bookings_list(request):
+    bookings = Booking.objects.all().order_by('-created_at')
+    return render(request, 'users/admin_bookings.html', {'bookings': bookings})

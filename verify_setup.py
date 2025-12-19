@@ -64,6 +64,9 @@ def run_checks():
         print(f"✅ Customer Dashboard URL resolves to: {url_dashboard}")
         url_admin = reverse('admin_dashboard')
         print(f"✅ Admin Dashboard URL resolves to: {url_admin}")
+        print(f"✅ Admin Users URL: {reverse('admin_users_list')}")
+        print(f"✅ Admin Venues URL: {reverse('admin_venues_list')}")
+        print(f"✅ Admin Bookings URL: {reverse('admin_bookings_list')}")
     except Exception as e:
         print(f"❌ URL resolution failed: {e}")
 
