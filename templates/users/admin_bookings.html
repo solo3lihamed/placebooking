@@ -35,6 +35,8 @@
                             {% else %}badge-warning{% endif %}">
                             {{ booking.get_status_display }}
                         </span>
+                        <a href="{% url 'admin_booking_detail' booking.id %}" class="btn btn-glass"
+                            style="font-size: 0.8rem; padding: 0.2rem 0.6rem; margin-right: 0.5rem;">🔍 التفاصيل</a>
                     </td>
                 </tr>
                 {% endfor %}

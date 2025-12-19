@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--color-primary);">تفاصيل الحجز #{{ booking.id }} 📝</h1>
+        <a href="{% url 'admin_bookings_list' %}" class="btn btn-glass">↩️ عودة للقائمة</a>
+    </div>
+
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- Booking Info -->
+            <div>
+                <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">معلومات الحجز</h3>
+                <p><strong>التاريخ:</strong> {{ booking.start_time|date:"Y-m-d H:i" }}</p>
+                <p><strong>المكان:</strong> {{ booking.venue.name }}</p>
+                <p><strong>المناسبة:</strong> {{ booking.event_type }} ({{ booking.attendees_count }} شخص)</p>
+                <p><strong>السعر الإجمالي:</strong> <span
+                        style="font-size: 1.2rem; font-weight: bold; color: var(--color-primary);">{{
+                        booking.total_price }} ريال</span></p>
+                <p><strong>الحالة الحالية:</strong>
+                    <span class="badge 
+                            {% if booking.status == 'CONFIRMED' or booking.status == 'APPROVED' %}badge-success
+                            {% elif booking.status == 'CANCELLED' or booking.status == 'REJECTED' %}badge-danger
+                            {% else %}badge-warning{% endif %}">
+                        {{ booking.get_status_display }}
+                    </span>
+                </p>
+            </div>
+
+            <!-- Customer Info -->
+            <div>
+                <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">معلومات العميل</h3>
+                <p><strong>الاسم:</strong> {{ booking.customer.username }}</p>
+                <p><strong>الهاتف:</strong> {{ booking.customer.phone_number|default:"غير متوفر" }}</p>
+                <p><strong>البريد:</strong> {{ booking.customer.email }}</p>
+                <p><strong>تاريخ التسجيل:</strong> {{ booking.customer.date_joined|date:"Y-m-d" }}</p>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(0,0,0,0.1); margin: 2rem 0;">
+
+        <!-- Status Actions -->
+        <h3 style="margin-bottom: 1rem;">⚙️ تغيير الحالة</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            {% if booking.status != 'CONFIRMED' %}
+            <a href="{% url 'admin_update_booking_status' booking.id 'CONFIRMED' %}" class="btn btn-primary"
+                style="background: var(--color-success);">✔ تأكيد الحجز</a>
+            {% endif %}
+
+            {% if booking.status != 'REJECTED' and booking.status != 'CANCELLED' %}
+            <a href="{% url 'admin_update_booking_status' booking.id 'REJECTED' %}" class="btn btn-primary"
+                style="background: var(--color-danger);">✖ رفض / إلغاء</a>
+            {% endif %}
+
+            {% if booking.status == 'CONFIRMED' %}
+            <a href="{% url 'admin_update_booking_status' booking.id 'COMPLETED' %}" class="btn btn-primary"
+                style="background: var(--color-secondary);">🏁 تسجيل كـ مكتمل</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

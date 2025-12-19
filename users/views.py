@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from bookings.models import Booking
 from venues.models import Venue
@@ -45,3 +46,25 @@ def admin_venues_list(request):
 def admin_bookings_list(request):
     bookings = Booking.objects.all().order_by('-created_at')
     return render(request, 'users/admin_bookings.html', {'bookings': bookings})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_booking_detail(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    return render(request, 'users/admin_booking_detail.html', {'booking': booking})
+
+@login_required
+@user_passes_test(is_admin)
+def admin_update_booking_status(request, booking_id, status):
+    booking = get_object_or_404(Booking, id=booking_id)
+    
+    # Simple validation using choices
+    valid_statuses = [choice[0] for choice in Booking.Status.choices]
+    if status in valid_statuses:
+        booking.status = status
+        booking.save()
+        messages.success(request, f"تم تحديث حالة الحجز #{booking.id} إلى {booking.get_status_display()}")
+    else:
+        messages.error(request, "حالة غير صحيحة!")
+        
+    return redirect('admin_booking_detail', booking_id=booking.id)
