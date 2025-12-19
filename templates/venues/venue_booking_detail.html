@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--color-primary);">تفاصيل الحجز #{{ booking.id }} (مدير) 📋</h1>
+        <a href="{% url 'venue_bookings' booking.venue.id %}" class="btn btn-glass">↩️ عودة للحجوزات</a>
+    </div>
+
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- Info -->
+            <div>
+                <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">البيانات الأساسية</h3>
+                <p><strong>المكان:</strong> {{ booking.venue.name }}</p>
+                <p><strong>المناسبة:</strong> {{ booking.event_type }}</p>
+                <p><strong>الضيف:</strong> {{ booking.customer.username }} ({{ booking.customer.phone_number|default:"-"
+                    }})</p>
+                <p><strong>الوقت:</strong> {{ booking.start_time|date:"Y-m-d H:i" }}</p>
+            </div>
+
+            <!-- Financial -->
+            <div>
+                <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">المالية</h3>
+                <div style="font-size: 2rem; font-weight: 800; color: var(--color-primary); margin-bottom: 0.5rem;">
+                    {{ booking.total_price }} ريال
+                </div>
+                <div
+                    class="badge {% if booking.status == 'CONFIRMED' %}badge-success{% else %}badge-warning{% endif %}">
+                    {{ booking.get_status_display }}
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.4); margin: 2rem 0;">
+
+        <!-- Actions -->
+        <h3 style="margin-bottom: 1rem;">اتخاذ إجراء</h3>
+        <div style="display: flex; gap: 1rem;">
+            {% if booking.status == 'PENDING' %}
+            <a href="{% url 'update_booking_status' booking.id 'CONFIRMED' %}" class="btn btn-primary"
+                style="background: var(--color-success);">✔ قبول الحجز</a>
+            <a href="{% url 'update_booking_status' booking.id 'REJECTED' %}" class="btn btn-primary"
+                style="background: var(--color-danger);">✖ رفض</a>
+            {% endif %}
+
+            {% if booking.status == 'CONFIRMED' %}
+            <a href="{% url 'update_booking_status' booking.id 'COMPLETED' %}" class="btn btn-glass">🏁 تم التنفيذ</a>
+            <a href="{% url 'update_booking_status' booking.id 'CANCELLED' %}" class="btn btn-glass"
+                style="color: var(--color-danger); border-color: var(--color-danger);">⛔ إلغاء اضطراري</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

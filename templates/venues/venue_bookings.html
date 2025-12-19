@@ -28,6 +28,8 @@
                         booking.id }}</td>
                     <td style="padding: 1rem;">
                         <span style="font-weight: bold;">{{ booking.customer.username }}</span>
+                        <a href="{% url 'venue_booking_detail' booking.id %}"
+                            style="display: block; font-size: 0.8rem; color: var(--color-secondary);">[عرض التفاصيل]</a>
                     </td>
                     <td style="padding: 1rem;">{{ booking.event_type }} ({{ booking.attendees_count }} شخص)</td>
                     <td style="padding: 1rem;">

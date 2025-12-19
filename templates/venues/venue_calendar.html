@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--color-primary);">📅 جدول الحجوزات: {{ venue.name }}</h1>
+        <div style="display: flex; gap: 1rem;">
+            <a href="?month={{ month|add:'-1' }}" class="btn btn-glass">السابق</a>
+            <span style="font-size: 1.5rem; font-weight: bold;">{{ month_name }} {{ year }}</span>
+            <a href="?month={{ month|add:'1' }}" class="btn btn-glass">التالي</a>
+        </div>
+        <a href="{% url 'manager_dashboard' %}" class="btn btn-glass">↩️ خروج</a>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="glass-card" style="padding: 1rem;">
+        <div class="calendar-grid">
+            <div class="day-header">Sun</div>
+            <div class="day-header">Mon</div>
+            <div class="day-header">Tue</div>
+            <div class="day-header">Wed</div>
+            <div class="day-header">Thu</div>
+            <div class="day-header">Fri</div>
+            <div class="day-header">Sat</div>
+
+            {% for week in calendar %}
+            {% for day in week %}
+            <div
+                class="day-cell {% if day == 0 %}empty{% endif %} {% if day == today.day and month == today.month and year == today.year %}today{% endif %}">
+                {% if day != 0 %}
+                <div class="day-number">{{ day }}</div>
+
+                <!-- Events -->
+                {% for event in events_by_day.items %}
+                {% if event.0 == day %}
+                {% for booking in event.1 %}
+                <div class="event-dot 
+                                        {% if booking.status == 'MAINTENANCE' %}maintenance
+                                        {% elif booking.status == 'CONFIRMED' %}confirmed
+                                        {% else %}pending{% endif %}"
+                    title="{{ booking.event_type }} - {{ booking.customer.username }}">
+
+                    {% if booking.status == 'MAINTENANCE' %}
+                    🔧 صيانة
+                    {% else %}
+                    🎉 {{ booking.start_time|date:"H:i" }}
+                    {% endif %}
+
+                    <a href="{% url 'venue_booking_detail' booking.id %}" style="position: absolute; inset:0;"></a>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Block Date Form -->
+    <div class="glass-card" style="margin-top: 2rem; max-width: 400px;">
+        <h3 style="color: var(--color-danger);">⛔ إغلاق يوم (صيانة)</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 1rem;">
+                <label>التاريخ:</label>
+                <input type="date" name="block_date" required style="width: 100%; padding: 0.5rem; border-radius: 8px;">
+            </div>
+            <button type="submit" class="btn btn-glass"
+                style="border-color: var(--color-danger); color: var(--color-danger);">إغلاق اليوم</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.5rem;
+    }
+
+    .day-header {
+        text-align: center;
+        font-weight: bold;
+        color: var(--color-secondary);
+        padding: 0.5rem;
+    }
+
+    .day-cell {
+        background: rgba(255, 255, 255, 0.4);
+        min-height: 100px;
+        border-radius: 12px;
+        padding: 0.5rem;
+        position: relative;
+        transition: 0.3s;
+    }
+
+    .day-cell:hover {
+        background: white;
+        transform: scale(1.02);
+    }
+
+    .day-cell.today {
+        border: 2px solid var(--color-primary);
+    }
+
+    .day-cell.empty {
+        background: transparent;
+    }
+
+    .day-number {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: var(--color-text-light);
+    }
+
+    .event-dot {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: white;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .event-dot.confirmed {
+        background: var(--color-success);
+    }
+
+    .event-dot.pending {
+        background: var(--color-warning);
+        color: #333;
+    }
+
+    .event-dot.maintenance {
+        background: var(--color-text-light);
+    }
+</style>
+{% endblock %}

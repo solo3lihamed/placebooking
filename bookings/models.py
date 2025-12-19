@@ -12,6 +12,8 @@ class Booking(models.Model):
         IN_PROGRESS = "IN_PROGRESS", _("In Progress")
         COMPLETED = "COMPLETED", _("Completed")
         CANCELLED = "CANCELLED", _("Cancelled")
+        REJECTED = "REJECTED", _("Rejected")
+        MAINTENANCE = "MAINTENANCE", _("Maintenance")
 
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="bookings")
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name="bookings")

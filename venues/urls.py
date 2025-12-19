@@ -9,5 +9,7 @@ urlpatterns = [
     path('<int:pk>/', views.venue_detail, name='venue_detail'),
     path('<int:pk>/bookings/', views.venue_bookings, name='venue_bookings'),
     path('bookings/<int:booking_id>/status/<str:status>/', views.update_booking_status, name='update_booking_status'),
+    path('bookings/<int:booking_id>/', views.venue_booking_detail, name='venue_booking_detail'),
+    path('<int:venue_id>/calendar/', views.venue_calendar, name='venue_calendar'),
     path('<int:venue_id>/book/<int:step>/', include('bookings.urls')),
 ]

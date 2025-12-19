@@ -67,7 +67,9 @@ def run_checks():
         print(f"✅ Admin Users URL: {reverse('admin_users_list')}")
         print(f"✅ Admin Venues URL: {reverse('admin_venues_list')}")
         print(f"✅ Admin Bookings URL: {reverse('admin_bookings_list')}")
-        # Note: 'admin_booking_detail' requires an ID, we'll check it in the flow
+        # Manager Features
+        print(f"✅ Venue Calendar URL: {reverse('venue_calendar', args=[1])}")
+        
     except Exception as e:
         print(f"❌ URL resolution failed: {e}")
 

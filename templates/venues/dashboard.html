@@ -41,6 +41,8 @@
                     <td style="padding: 1rem;">{{ venue.base_price }}</td>
                     <td style="padding: 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
                         <div style="display: flex; gap: 0.5rem;">
+                            <a href="{% url 'venue_calendar' venue.pk %}" class="btn btn-glass"
+                                style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">📅 الجدول</a>
                             <a href="{% url 'venue_bookings' venue.pk %}" class="btn btn-glass"
                                 style="font-size: 0.8rem; padding: 0.3rem 0.8rem;">📅 الحجوزات</a>
                             <a href="{% url 'update_venue' venue.pk %}" class="btn btn-glass"
