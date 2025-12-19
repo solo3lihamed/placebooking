@@ -1,23 +1,31 @@
 /* Funny Glassy System - Core Variables */
 :root {
-    /* Palette: Vibrant & Playful */
-    --color-bg: #8EC5FC;
-    --color-bg-gradient: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+    /* Palette: Matte & Calm (Pastels & Muted Tones) */
+    --color-bg: #fdfbf7;
+    --color-bg-gradient: linear-gradient(135deg, #fdfbf7 0%, #e8ecf1 100%);
 
-    --glass-bg: rgba(255, 255, 255, 0.25);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    /* Frosted Matte Glass */
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    /* More opaque for matte feel */
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
 
-    --color-primary: #FF6B6B;
-    /* Fun Red/Pink */
-    --color-primary-hover: #EE5253;
-    --color-secondary: #48DBFB;
-    /* Electric Blue */
-    --color-text: #2f3542;
-    --color-text-light: #57606f;
-    --color-success: #1dd1a1;
-    --color-danger: #ff6b6b;
-    --color-warning: #feca57;
+    --color-primary: #e09f7d;
+    /* Terracotta / Soft Coral */
+    --color-primary-hover: #cd8b6b;
+    --color-secondary: #94b4a4;
+    /* Sage Green */
+    --color-text: #4a4a4a;
+    /* Soft Dark Grey */
+    --color-text-light: #7a7a7a;
+
+    --color-success: #88cca1;
+    /* Muted Green */
+    --color-danger: #e68a8a;
+    /* Muted Red */
+    --color-warning: #f0d085;
+    /* Muted Yellow */
 
     --font-main: 'Fredoka', sans-serif;
 
@@ -68,7 +76,8 @@ body {
     left: -10%;
     width: 500px;
     height: 500px;
-    background: #ff9ff3;
+    background: #e6dace;
+    /* Warm Beige */
     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
 }
 
@@ -77,7 +86,8 @@ body {
     right: -10%;
     width: 600px;
     height: 600px;
-    background: #54a0ff;
+    background: #d4e0dd;
+    /* Pale Sage */
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
     animation-delay: -5s;
 }
@@ -87,9 +97,11 @@ body {
     left: 40%;
     width: 300px;
     height: 300px;
-    background: #feca57;
+    background: #e3dff2;
+    /* Muted Lavender */
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    animation-duration: 15s;
+    animation-duration: 25s;
+    /* Slower animation for calmness */
 }
 
 @keyframes float {
