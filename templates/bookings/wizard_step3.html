@@ -1,0 +1,53 @@
+{% extends 'bookings/wizard_base.html' %}
+
+{% block wizard_content %}
+<h2 style="margin-bottom: 1.5rem; text-align: center;">💅 تدليع المكان</h2>
+<form method="post">
+    {% csrf_token %}
+
+    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--color-secondary);">اختر الخدمات الإضافية</h3>
+    <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
+        {% for service in venue.services.all %}
+        <div
+            style="background: rgba(255,255,255,0.3); padding: 1rem; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.5);">
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" name="services" value="{{ service.id }}" id="service_{{ service.id }}"
+                    style="width: 20px; height: 20px; margin-left: 0.5rem; accent-color: var(--color-primary);">
+                <label for="service_{{ service.id }}" style="font-weight: bold; cursor: pointer;">{{ service.name
+                    }}</label>
+            </div>
+            <span style="color: var(--color-primary); font-weight: bold;">{% if service.price > 0 %}{{ service.price }}
+                ريال{% else %}مجاناً{% endif %}</span>
+        </div>
+        {% empty %}
+        <p style="text-align: center; opacity: 0.7;">مافي خدمات إضافية، بس المكان يجنن لوحده! 😉</p>
+        {% endfor %}
+    </div>
+
+    <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--color-secondary);">الوجبات 🍔</h3>
+    <div style="display: grid; gap: 1rem;">
+        {% for meal in venue.meals.all %}
+        <div
+            style="background: rgba(255,255,255,0.3); padding: 1rem; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.5);">
+            <div>
+                <div style="font-weight: bold;">{{ meal.name }}</div>
+                <div style="font-size: 0.8rem; opacity: 0.7;">{{ meal.price }} ريال (أقل طلب: {{ meal.min_quantity }})
+                </div>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <label style="margin-left: 0.5rem;">العدد:</label>
+                <input type="number" name="meal_qty_{{ meal.id }}" value="0" min="0"
+                    style="width: 80px; padding: 0.5rem; border-radius: 8px; border: 1px solid transparent; text-align: center;">
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; opacity: 0.7;">مافي وجبات، جيب أكلك معاك! 🍕</p>
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+        <a href="{% url 'booking_wizard_step' venue.id 2 %}" class="btn btn-glass">➡️ السابق</a>
+        <button type="submit" class="btn btn-primary">التالي ⬅️</button>
+    </div>
+</form>
+{% endblock %}

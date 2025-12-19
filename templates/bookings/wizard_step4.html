@@ -1,0 +1,56 @@
+{% extends 'bookings/wizard_base.html' %}
+
+{% block wizard_content %}
+<h2 style="margin-bottom: 1.5rem; text-align: center;">🔍 مراجعة أخيرة</h2>
+
+<div style="background: rgba(255,255,255,0.4); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem;">
+    <h3 style="font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 0.5rem;">📅 الميعاد</h3>
+    <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+        من <span style="font-weight: bold;">{{ start|date:"Y-m-d H:i" }}</span> <br>
+        إلى <span style="font-weight: bold;">{{ end|date:"Y-m-d H:i" }}</span>
+    </p>
+
+    <h3 style="font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 0.5rem;">📝 التفاصيل</h3>
+    <p>نوع الحفلة: <span style="font-weight: bold;">{{ booking_data.event_type }}</span></p>
+    <p>الحضور: <span style="font-weight: bold;">{{ booking_data.attendees_count }}</span> شخص</p>
+</div>
+
+{% if services or meals %}
+<div style="background: rgba(255,255,255,0.4); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem;">
+    {% if services %}
+    <h3 style="font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 0.5rem;">✨ الخدمات</h3>
+    <ul style="list-style: inside; padding-right: 1rem; margin-bottom: 1rem;">
+        {% for service in services %}
+        <li>{{ service.name }} - {{ service.price }} ريال</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if meals %}
+    <h3 style="font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 0.5rem;">🍔 الوجبات</h3>
+    <ul style="list-style: inside; padding-right: 1rem;">
+        {% for meal, qty in meals %}
+        <li>{{ meal.name }} (x{{ qty }}) - {% widthratio meal.price 1 qty %} ريال</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endif %}
+
+<div style="text-align: center; margin-top: 2rem;">
+    <p style="font-size: 1.25rem; margin-bottom: 0.5rem;">الإجمالي المتوقع 💰</p>
+    <div
+        style="font-size: 3rem; font-weight: 800; color: var(--color-primary); text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">
+        {{ total_price }} <span style="font-size: 1.5rem;">ريال</span>
+    </div>
+</div>
+
+<form method="post" style="margin-top: 2rem;">
+    {% csrf_token %}
+    <div style="display: flex; justify-content: space-between;">
+        <a href="{% url 'booking_wizard_step' venue.id 3 %}" class="btn btn-glass">➡️ نرجع نعدل؟</a>
+        <button type="submit" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 3rem;">أكد الحجز!
+            🚀</button>
+    </div>
+</form>
+{% endblock %}

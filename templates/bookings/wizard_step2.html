@@ -1,0 +1,50 @@
+{% extends 'bookings/wizard_base.html' %}
+
+{% block wizard_content %}
+<h2 style="margin-bottom: 1.5rem; text-align: center;">📝 تفاصيل الحفلة</h2>
+<form method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+    <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div style="color: var(--color-danger); font-size: 0.875rem; margin-top: 0.25rem;">
+            {{ field.errors }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+        <a href="{% url 'booking_wizard_step' venue.id 1 %}" class="btn btn-glass">➡️ السابق</a>
+        <button type="submit" class="btn btn-primary">التالي ⬅️</button>
+    </div>
+</form>
+
+<style>
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 16px;
+        /* slightly less round for textarea */
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.5);
+        font-family: inherit;
+        font-size: 1rem;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+        background: white;
+        border-color: var(--color-secondary);
+        box-shadow: 0 0 0 4px rgba(72, 219, 251, 0.2);
+    }
+</style>
+{% endblock %}

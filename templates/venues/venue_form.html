@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0; max-width: 800px;">
+    <div class="glass-card">
+        <h1 style="color: var(--color-primary); margin-bottom: 2rem; text-align: center;">
+            {% if form.instance.pk %} تعديل المكان {% else %} إضافة مكان جديد 🎉 {% endif %}
+        </h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <div style="font-size: 0.8rem; color: var(--color-text-light); margin-top: 0.2rem;">{{ field.help_text
+                    }}</div>
+                {% endif %}
+                {% if field.errors %}
+                <div style="color: var(--color-danger); font-size: 0.875rem; margin-top: 0.25rem;">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                <a href="{% url 'manager_dashboard' %}" class="btn btn-glass">إلغاء</a>
+                <button type="submit" class="btn btn-primary" style="padding: 0.8rem 3rem;">حفظ ✅</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Form inputs styling */
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 1rem;
+        border-radius: var(--radius-round);
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.5);
+        font-family: inherit;
+        font-size: 1rem;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    textarea {
+        border-radius: 20px;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        background: white;
+        border-color: var(--color-secondary);
+        box-shadow: 0 0 0 4px rgba(72, 219, 251, 0.2);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Places | احجز مكانك بلمسة</title>
+    <!-- Funny Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <!-- Floating Blobs Background -->
+    <div class="blobs-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Glass Navigation -->
+    <nav class="glass-nav">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="{% url 'home' %}"
+                style="font-size: 1.8rem; font-weight: 700; color: var(--color-primary); letter-spacing: -1px;">
+                🎉 Places<span style="color: var(--color-secondary);">Booking</span>
+            </a>
+
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="{% url 'home' %}" class="nav-link">الرئيسية</a>
+                <a href="{% url 'search' %}" class="nav-link">بحث</a>
+
+                {% if user.is_authenticated %}
+                {% if user.is_manager %}
+                <a href="{% url 'manager_dashboard' %}" class="nav-link">لوحة المدير</a>
+                {% endif %}
+                {% if user.is_superuser %}
+                <a href="{% url 'admin_dashboard' %}" class="nav-link">لوحة الأدمن</a>
+                {% endif %}
+
+                <a href="{% url 'customer_dashboard' %}" class="btn btn-glass">
+                    👤 {{ user.username }}
+                </a>
+                {% else %}
+                <a href="/accounts/login/" class="nav-link">دخول</a>
+                <a href="/accounts/signup/" class="btn btn-primary">حساب جديد</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="min-height: 70vh;">
+        {% if messages %}
+        <div class="container" style="margin-top: 2rem;">
+            {% for message in messages %}
+            <div class="glass-card"
+                style="padding: 1rem; margin-bottom: 1rem; background: {{ message.tags|yesno:'var(--color-success),var(--color-danger)' }}; color: white; border: none;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Glass Footer -->
+    <footer class="glass-footer">
+        <div class="container">
+            <p style="opacity: 0.8; font-weight: 500;">
+                صنع بحب 💖 و طاقة إيجابية &copy; {% now "Y" %}
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

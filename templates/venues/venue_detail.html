@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+
+    <!-- Header Card -->
+    <div class="glass-card" style="margin-bottom: 2rem; position: relative; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1 style="font-size: 3rem; color: var(--color-primary); margin-bottom: 0.5rem;">{{ venue.name }}</h1>
+                <p style="font-size: 1.2rem; color: var(--color-text);">📍 {{ venue.address }}</p>
+            </div>
+            <div>
+                <span class="badge badge-warning" style="font-size: 1rem;">{{ venue.get_venue_type_display }}</span>
+                <span class="badge badge-success" style="font-size: 1rem; margin-right: 0.5rem;">{{
+                    venue.get_status_display }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+
+        <!-- Main Content -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            {% if venue.description %}
+            <div class="glass-card">
+                <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">عن المكان</h3>
+                <p style="line-height: 1.8;">{{ venue.description }}</p>
+            </div>
+            {% endif %}
+
+            <div class="glass-card">
+                <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">✨ الخدمات المتوفرة</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    {% for service in venue.services.all %}
+                    <div
+                        style="background: rgba(255,255,255,0.4); padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: bold;">
+                        {{ service.name }}
+                        <span style="font-size: 0.8rem; color: var(--color-primary); margin-right: 0.5rem;">({{
+                            service.price }} ريال)</span>
+                    </div>
+                    {% empty %}
+                    <p>لا توجد خدمات إضافية.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">🍔 قائمة الطعام</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                    {% for meal in venue.meals.all %}
+                    <div
+                        style="background: rgba(255,255,255,0.3); padding: 1rem; border-radius: 16px; text-align: center;">
+                        <span style="font-size: 2rem; display: block; margin-bottom: 0.5rem;">🍽️</span>
+                        <div style="font-weight: bold;">{{ meal.name }}</div>
+                        <div style="color: var(--color-text-light);">{{ meal.price }} ريال</div>
+                    </div>
+                    {% empty %}
+                    <p>المكان لا يقدم وجبات.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar / Booking Card -->
+        <div>
+            <div class="glass-card" style="position: sticky; top: 120px; text-align: center;">
+                <h2 style="color: var(--color-primary); margin-bottom: 0.5rem;">احجز الآن</h2>
+                <p style="color: var(--color-text-light); margin-bottom: 2rem;">بكل سهولة وبدون تعقيد</p>
+
+                <div
+                    style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 16px; margin-bottom: 2rem;">
+                    <div style="font-size: 0.9rem; color: #666;">يبدأ السعر من</div>
+                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--color-text);">{{ venue.base_price }}
+                    </div>
+                    <div style="font-size: 0.9rem; color: #666;">ريال / {{ venue.get_pricing_method_display }}</div>
+                </div>
+
+                <a href="{% url 'booking_wizard_step' venue.id 1 %}" class="btn btn-primary"
+                    style="width: 100%; font-size: 1.2rem; margin-bottom: 1rem;">
+                    ابدأ الحجز 📅
+                </a>
+
+                <p style="font-size: 0.8rem; opacity: 0.7;">
+                    * الحجز يخضع لسياسة الإلغاء الخاصة بالمكان
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

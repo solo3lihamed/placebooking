@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <h1 style="color: white; margin-bottom: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">🔍 دور على راحتك</h1>
+
+    <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 2rem;">
+
+        <!-- Glass Sidebar -->
+        <div class="glass-card" style="height: fit-content;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--color-primary);">فلاتر البحث</h3>
+            <form method="get">
+                {% for field in form %}
+                <div style="margin-bottom: 1.2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem;">{{
+                        field.label }}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">يلا نبحث!
+                    🔭</button>
+            </form>
+        </div>
+
+        <!-- Results Grid -->
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; align-content: start;">
+            {% for venue in venues %}
+            <div class="glass-card" style="padding: 0; overflow: hidden; transition: transform 0.4s ease;">
+                <div
+                    style="height: 180px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; position: relative;">
+                    {% if venue.images.first %}
+                    <img src="{{ venue.images.first.image.url }}" alt="{{ venue.name }}"
+                        style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <span style="font-size: 3rem;">🎪</span>
+                    {% endif %}
+                    <div style="position: absolute; top: 1rem; right: 1rem;">
+                        <span class="badge badge-glass">{{ venue.get_venue_type_display }}</span>
+                    </div>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 0.5rem;">{{ venue.name }}</h3>
+                    <p style="color: var(--color-text-light); font-size: 0.9rem;">👥 السعة: {{ venue.capacity }} شخص</p>
+                    <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: var(--color-primary); font-weight: bold;">{{ venue.base_price }} ريال</span>
+                        <a href="{% url 'venue_detail' venue.pk %}" class="btn btn-outline"
+                            style="font-size: 0.8rem; border-color: var(--color-primary); color: var(--color-primary);">التفاصيل</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="glass-card" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <p style="font-size: 1.5rem;">ما لقينا شي.. جرب تغير البحث! 🤷‍♂️</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom override for form inputs in search sidebar */
+    input,
+    select {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.4);
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+        background: white;
+        border-color: var(--color-secondary);
+    }
+</style>
+{% endblock %}

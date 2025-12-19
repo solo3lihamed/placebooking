@@ -1,0 +1,45 @@
+{% extends 'bookings/wizard_base.html' %}
+
+{% block wizard_content %}
+<h2 style="margin-bottom: 1.5rem; text-align: center;">⏰ متى المناسبة؟</h2>
+<form method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+    <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div style="color: var(--color-danger); font-size: 0.875rem; margin-top: 0.25rem;">
+            {{ field.errors }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div style="margin-top: 2rem; text-align: left;">
+        <button type="submit" class="btn btn-primary">التالي ⬅️</button>
+    </div>
+</form>
+
+<style>
+    /* Styling form widgets explicitly */
+    input[type="datetime-local"] {
+        width: 100%;
+        padding: 1rem;
+        border-radius: var(--radius-round);
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.5);
+        font-family: inherit;
+        font-size: 1rem;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input[type="datetime-local"]:focus {
+        background: white;
+        border-color: var(--color-secondary);
+        box-shadow: 0 0 0 4px rgba(72, 219, 251, 0.2);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--color-primary);">حجوزات: {{ venue.name }} 📅</h1>
+        <a href="{% url 'manager_dashboard' %}" class="btn btn-glass">↩️ عودة للوحة التحكم</a>
+    </div>
+
+    <div class="glass-card" style="padding: 2rem; overflow-x: auto;">
+
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 1rem; min-width: 900px;">
+            <thead>
+                <tr style="text-align: right; color: var(--color-text-light);">
+                    <th style="padding: 1rem;">رقم الحجز</th>
+                    <th style="padding: 1rem;">العميل</th>
+                    <th style="padding: 1rem;">المناسبة</th>
+                    <th style="padding: 1rem;">الوقت</th>
+                    <th style="padding: 1rem;">السعر</th>
+                    <th style="padding: 1rem;">الحالة</th>
+                    <th style="padding: 1rem;">قرارك</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr style="background: rgba(255,255,255,0.3);">
+                    <td style="padding: 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">#{{
+                        booking.id }}</td>
+                    <td style="padding: 1rem;">
+                        <span style="font-weight: bold;">{{ booking.customer.username }}</span>
+                    </td>
+                    <td style="padding: 1rem;">{{ booking.event_type }} ({{ booking.attendees_count }} شخص)</td>
+                    <td style="padding: 1rem;">
+                        <div style="font-size: 0.9rem;">{{ booking.start_time|date:"Y-m-d" }}</div>
+                        <div style="font-size: 0.8rem; color: var(--color-text-light);">{{ booking.start_time|date:"H:i"
+                            }} - {{ booking.end_time|date:"H:i" }}</div>
+                    </td>
+                    <td style="padding: 1rem; font-weight: bold; color: var(--color-primary);">{{ booking.total_price }}
+                    </td>
+                    <td style="padding: 1rem;">
+                        <span class="badge 
+                            {% if booking.status == 'CONFIRMED' or booking.status == 'APPROVED' %}badge-success
+                            {% elif booking.status == 'CANCELLED' or booking.status == 'REJECTED' %}badge-danger
+                            {% else %}badge-warning{% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                        {% if booking.status == 'PENDING' %}
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="{% url 'update_booking_status' booking.id 'CONFIRMED' %}" class="btn btn-primary"
+                                style="font-size: 0.75rem; padding: 0.3rem 0.8rem; background: var(--color-success);">✔
+                                تأكيد</a>
+                            <a href="{% url 'update_booking_status' booking.id 'REJECTED' %}" class="btn btn-glass"
+                                style="font-size: 0.75rem; padding: 0.3rem 0.8rem; border-color: var(--color-danger); color: var(--color-danger);">✖
+                                رفض</a>
+                        </div>
+                        {% elif booking.status == 'CONFIRMED' %}
+                        <a href="{% url 'update_booking_status' booking.id 'COMPLETED' %}" class="btn btn-glass"
+                            style="font-size: 0.75rem; padding: 0.3rem 0.8rem;">🏁 إكمال</a>
+                        {% elif booking.status == 'IN_PROGRESS' %}
+                        <span style="font-size: 0.8rem;">جاري التنفيذ...</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="padding: 3rem; text-align: center;">المكان فاضي، مافي حجوزات لسه! 🦗</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

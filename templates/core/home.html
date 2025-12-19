@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0; text-align: center;">
+
+    <!-- Hero Section -->
+    <div class="glass-card" style="padding: 4rem 2rem; margin-bottom: 4rem;">
+        <h1
+            style="font-size: 3rem; color: var(--color-primary); margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+            أماكن تفرح قلبك 🎈
+        </h1>
+        <p style="font-size: 1.5rem; color: var(--color-text-light); margin-bottom: 2rem;">
+            أحجز قاعات، مطاعم، و كافيهات بأسهل طريقة و أخف دم!
+        </p>
+        <a href="{% url 'search' %}" class="btn btn-primary" style="font-size: 1.25rem;">
+            ابحث عن مكانك 🚀
+        </a>
+    </div>
+
+    <!-- Featured Venues -->
+    <h2 style="text-align: right; margin-bottom: 2rem; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+        🌟 أماكن مميزة
+    </h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
+        {% for venue in featured_venues %}
+        <div class="glass-card" style="padding: 0; overflow: hidden; text-align: right;">
+            <div
+                style="height: 200px; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; position: relative;">
+                {% if venue.images.first %}
+                <img src="{{ venue.images.first.image.url }}" alt="{{ venue.name }}"
+                    style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                <span style="font-size: 3rem;">🏟️</span>
+                {% endif %}
+                <div style="position: absolute; top: 1rem; right: 1rem;">
+                    <span class="badge badge-glass">{{ venue.get_venue_type_display }}</span>
+                </div>
+            </div>
+
+            <div style="padding: 1.5rem;">
+                <h3 style="margin-bottom: 0.5rem;">{{ venue.name }}</h3>
+                <p style="color: var(--color-text-light); margin-bottom: 1rem; font-size: 0.9rem;">
+                    📍 {{ venue.address }}
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 700; color: var(--color-primary);">{{ venue.base_price }} ريال</span>
+                    <a href="{% url 'venue_detail' venue.pk %}" class="btn btn-outline"
+                        style="border: 2px solid var(--color-secondary); color: var(--color-secondary);">
+                        شوف التفاصيل
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="glass-card" style="grid-column: 1/-1; text-align: center;">
+            <p>لسه بنجهز أماكن جديدة! 🚧</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

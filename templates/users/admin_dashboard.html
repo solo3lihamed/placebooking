@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <h1 style="color: white; margin-bottom: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">لوحة الأدمن 🛠️</h1>
+
+    <!-- Stats Cards -->
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        <div class="glass-card" style="text-align: center; border-color: rgba(255,255,255,0.8);">
+            <h3 style="color: var(--color-text-light); font-size: 1rem; margin-bottom: 0.5rem;">👥 إجمالي المستخدمين
+            </h3>
+            <p
+                style="font-size: 3.5rem; font-weight: 800; color: var(--color-primary); text-shadow: 2px 2px 0px rgba(0,0,0,0.05);">
+                {{ total_users }}</p>
+        </div>
+        <div class="glass-card" style="text-align: center; border-color: rgba(255,255,255,0.8);">
+            <h3 style="color: var(--color-text-light); font-size: 1rem; margin-bottom: 0.5rem;">🏟️ إجمالي الأماكن</h3>
+            <p
+                style="font-size: 3.5rem; font-weight: 800; color: var(--color-secondary); text-shadow: 2px 2px 0px rgba(0,0,0,0.05);">
+                {{ total_venues }}</p>
+        </div>
+        <div class="glass-card" style="text-align: center; border-color: rgba(255,255,255,0.8);">
+            <h3 style="color: var(--color-text-light); font-size: 1rem; margin-bottom: 0.5rem;">📅 إجمالي الحجوزات</h3>
+            <p style="font-size: 3.5rem; font-weight: 800; color: #feca57; text-shadow: 2px 2px 0px rgba(0,0,0,0.05);">
+                {{ total_bookings }}</p>
+        </div>
+    </div>
+
+    <!-- Recent Bookings Table -->
+    <div class="glass-card" style="padding: 2rem; overflow-x: auto;">
+        <h2 style="margin-bottom: 1.5rem; color: var(--color-primary);">🚀 أحدث النشاطات</h2>
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 0.8rem;">
+            <thead>
+                <tr style="text-align: right; color: var(--color-text-light);">
+                    <th style="padding: 1rem;">رقم الحجز</th>
+                    <th style="padding: 1rem;">المكان</th>
+                    <th style="padding: 1rem;">العميل</th>
+                    <th style="padding: 1rem;">التاريخ</th>
+                    <th style="padding: 1rem;">السعر</th>
+                    <th style="padding: 1rem;">الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in recent_bookings %}
+                <tr style="background: rgba(255,255,255,0.3);">
+                    <td style="padding: 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">#{{
+                        booking.id }}</td>
+                    <td style="padding: 1rem;">{{ booking.venue.name }}</td>
+                    <td style="padding: 1rem;">{{ booking.customer.username }}</td>
+                    <td style="padding: 1rem;">{{ booking.start_time|date:"Y-m-d" }}</td>
+                    <td style="padding: 1rem;">{{ booking.total_price }} ريال</td>
+                    <td style="padding: 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                        <span class="badge 
+                            {% if booking.status == 'CONFIRMED' or booking.status == 'APPROVED' %}badge-success
+                            {% elif booking.status == 'CANCELLED' or booking.status == 'REJECTED' %}badge-danger
+                            {% else %}badge-warning{% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 2rem; text-align: center; color: var(--color-text-light);">السيستم
+                        هادي خالص... 😴</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

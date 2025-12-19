@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0;">
+    <h1 style="color: var(--color-primary); margin-bottom: 2rem; text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">أهلاً
+        في مساحتك الخاصة 👋</h1>
+
+    <div class="glass-card" style="padding: 2rem; overflow-x: auto;">
+        <h2 style="margin-bottom: 1.5rem; color: var(--color-secondary);">🎫 حجوزاتك</h2>
+
+        <table style="width: 100%; border-collapse: separate; border-spacing: 0 1rem; min-width: 800px;">
+            <thead>
+                <tr style="text-align: right; color: var(--color-text-light);">
+                    <th style="padding: 1rem;">رقم الحجز</th>
+                    <th style="padding: 1rem;">المكان</th>
+                    <th style="padding: 1rem;">التاريخ</th>
+                    <th style="padding: 1rem;">السعر</th>
+                    <th style="padding: 1rem;">الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr style="background: rgba(255,255,255,0.3); transition: 0.3s; border-radius: 12px;">
+                    <td style="padding: 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">#{{
+                        booking.id }}</td>
+                    <td style="padding: 1rem;">
+                        <a href="{% url 'venue_detail' booking.venue.id %}"
+                            style="font-weight: bold; color: var(--color-text);">{{ booking.venue.name }}</a>
+                    </td>
+                    <td style="padding: 1rem;">{{ booking.start_time|date:"Y-m-d" }}</td>
+                    <td style="padding: 1rem; font-weight: bold; color: var(--color-primary);">{{ booking.total_price }}
+                        ريال</td>
+                    <td style="padding: 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                        <span class="badge 
+                            {% if booking.status == 'CONFIRMED' or booking.status == 'APPROVED' %}badge-success
+                            {% elif booking.status == 'CANCELLED' or booking.status == 'REJECTED' %}badge-danger
+                            {% else %}badge-warning{% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--color-text-light);">
+                        لسه ما حجزت شي؟ <a href="{% url 'search' %}"
+                            style="color: var(--color-primary); text-decoration: underline;">اكتشف الأماكن</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

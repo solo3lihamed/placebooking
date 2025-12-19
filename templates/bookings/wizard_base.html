@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding: 4rem 0; max-width: 800px;">
+    <div class="glass-card" style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--color-primary); margin-bottom: 0.5rem;">حجز: {{ venue.name }} 🥳</h1>
+        <p style="color: var(--color-text-light);">خطوات بسيطة والحفلة تبدأ!</p>
+    </div>
+
+    <!-- Bubbly Progress Bar -->
+    <div
+        style="display: flex; justify-content: space-between; margin-bottom: 3rem; position: relative; padding: 0 2rem;">
+        <!-- Line background -->
+        <div
+            style="position: absolute; top: 50%; left: 2rem; right: 2rem; height: 4px; background: rgba(255,255,255,0.3); border-radius: 2px; z-index: 0;">
+        </div>
+
+        {% with current_step=request.resolver_match.kwargs.step|default:1 %}
+
+        {% for i in "1234" %}
+        <div style="z-index: 1; 
+                    width: 50px; height: 50px; border-radius: 50%; 
+                    display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;
+                    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                    {% if current_step >= i|add:0 %}
+                        background: var(--color-primary); color: white; transform: scale(1.1); box-shadow: 0 4px 10px rgba(255,107,107,0.4);
+                    {% else %}
+                        background: rgba(255,255,255,0.5); color: #64748b;
+                    {% endif %}">
+            {{ i }}
+        </div>
+        {% endfor %}
+
+        {% endwith %}
+    </div>
+
+    <div class="glass-card">
+        {% if messages %}
+        {% for message in messages %}
+        <div
+            style="background-color: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; text-align: center;">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% block wizard_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
